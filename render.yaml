@@ -1,0 +1,16 @@
+# Configuration de déploiement pour Render (https://render.com)
+# Render lit ce fichier automatiquement : aucune saisie manuelle nécessaire.
+services:
+  - type: web
+    name: genoped-gp-ai
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --timeout 120 --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: SECRET_KEY          # clé de session générée aléatoirement par Render
+        generateValue: true
