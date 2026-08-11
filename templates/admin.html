@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Back-office — GénoPed</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="entete">
+    <div class="conteneur entete-flex">
+      <a class="marque" href="{{ url_for('accueil') }}" aria-label="GénoPed — retour à l'accueil">
+        <span class="logo" aria-hidden="true">GP</span>
+        <div>
+          <h1>Back-office</h1>
+          <p class="sous-titre">Suivi des consultations · GénoPed</p>
+        </div>
+      </a>
+      <a class="bouton clair petit" href="{{ url_for('accueil') }}">Retour au site</a>
+    </div>
+  </header>
+
+  <main class="conteneur large">
+
+    <section class="chiffres" aria-label="Indicateurs">
+      <div class="chiffre">
+        <span class="chiffre-num">{{ stats.total }}</span>
+        <span class="chiffre-lbl">consultations enregistrées</span>
+      </div>
+      <div class="chiffre">
+        <span class="chiffre-num">{{ stats.confiance_moyenne if stats.confiance_moyenne else '—' }} %</span>
+        <span class="chiffre-lbl">confiance moyenne (1<sup>re</sup> piste)</span>
+      </div>
+      <div class="chiffre">
+        <span class="chiffre-num">{{ stats.repartition | length }}</span>
+        <span class="chiffre-lbl">maladies déjà suggérées</span>
+      </div>
+      <div class="chiffre">
+        <span class="chiffre-num">{{ base }}</span>
+        <span class="chiffre-lbl">moteur de base de données</span>
+      </div>
+    </section>
+
+    <section class="etapes-accueil">
+      <h3>Répartition des diagnostics proposés</h3>
+      {% if stats.repartition %}
+      <table class="tableau">
+        <thead><tr><th>Maladie (1<sup>re</sup> piste)</th><th>Occurrences</th><th>Part</th></tr></thead>
+        <tbody>
+          {% for maladie, n in stats.repartition %}
+          <tr>
+            <td>{{ maladie }}</td>
+            <td>{{ n }}</td>
+            <td>
+              <div class="jauge mini">
+                <div class="jauge-remplie" style="width: {{ (n / stats.total * 100) | round(1) }}%"></div>
+              </div>
+              {{ (n / stats.total * 100) | round(1) }} %
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>Aucune consultation enregistrée pour l'instant.</p>
+      {% endif %}
+    </section>
+
+    <section class="etapes-accueil">
+      <h3>50 dernières consultations</h3>
+      {% if consultations %}
+      <div class="table-scroll">
+        <table class="tableau">
+          <thead>
+            <tr>
+              <th>#</th><th>Date (UTC)</th><th>Praticien</th><th>Âge</th><th>Symptômes</th>
+              <th>1<sup>re</sup> piste</th><th>2<sup>e</sup></th><th>3<sup>e</sup></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in consultations %}
+            <tr>
+              <td>{{ c.id }}</td>
+              <td>{{ c.horodatage.strftime('%d/%m/%Y %H:%M') if c.horodatage else '—' }}</td>
+              <td>{% if c.praticien_nom %}{{ c.praticien_prenom }} {{ c.praticien_nom }}{% else %}—{% endif %}</td>
+              <td>{{ c.age_patient | round | int if c.age_patient is not none else '—' }}</td>
+              <td>
+                {% set n = (c.hypotonie_musculaire or 0) + (c.retard_croissance or 0)
+                          + (c.convulsions or 0) + (c.detresse_respiratoire or 0)
+                          + (c.regression_neurologique or 0) %}
+                {{ n }}/5
+              </td>
+              <td><strong>{{ c.maladie_1 }}</strong> <span class="freq">{{ c.probabilite_1 }} %</span></td>
+              <td>{{ c.maladie_2 }} <span class="freq">{{ c.probabilite_2 }} %</span></td>
+              <td>{{ c.maladie_3 }} <span class="freq">{{ c.probabilite_3 }} %</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p>Aucune consultation enregistrée pour l'instant.</p>
+      {% endif %}
+    </section>
+
+    <section class="ethique">
+      <h3>Protection des données</h3>
+      <p>
+        Les consultations sont enregistrées <strong>sans aucune donnée identifiante</strong> :
+        ni nom, ni date de naissance, ni identifiant patient. Seuls les signes cliniques saisis et
+        la suggestion du modèle sont conservés, à des fins de traçabilité médicale et
+        d'amélioration continue.
+      </p>
+      <p class="mention-rgpd">
+        Accès restreint aux administrateurs GénoPed. En production, la base est hébergée sur une
+        infrastructure certifiée HDS, avec une durée de conservation limitée.
+      </p>
+    </section>
+
+    <footer class="pied">
+      <p>GénoPed · Back-office administrateur</p>
+    </footer>
+  </main>
+</body>
+</html>

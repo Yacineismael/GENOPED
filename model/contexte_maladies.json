@@ -1,0 +1,156 @@
+{
+ "Amyotrophie spinale": {
+  "description": "Dégénérescence des motoneurones (gène SMN1) qui commandent les muscles. Elle provoque une faiblesse et une hypotonie musculaires marquées, souvent avec gêne respiratoire.",
+  "famille": "neuromusculaire",
+  "effectif": 1291,
+  "signature": {
+   "Hypotonie musculaire": 89.0,
+   "Retard de croissance": 51.0,
+   "Convulsions": 11.0,
+   "Détresse respiratoire": 70.0,
+   "Régression neurologique": 14.0
+  },
+  "examens": [
+   "Recherche de délétion du gène SMN1 (examen de référence)",
+   "Électromyogramme (EMG)",
+   "Évaluation de la fonction respiratoire"
+  ]
+ },
+ "Anomalie du tube neural": {
+  "description": "Malformation congénitale : le tube neural, qui forme le cerveau et la moelle épinière, ne s'est pas refermé correctement pendant la grossesse (ex. spina bifida). Le manque d'acide folique est un facteur connu.",
+  "famille": "malformation",
+  "effectif": 148,
+  "signature": {
+   "Hypotonie musculaire": 63.0,
+   "Retard de croissance": 40.0,
+   "Convulsions": 25.0,
+   "Détresse respiratoire": 36.0,
+   "Régression neurologique": 55.0
+  },
+  "examens": [
+   "Échographie et IRM médullaire (examen de référence)",
+   "Dosage de l'alpha-fœtoprotéine en contexte prénatal",
+   "Avis neurochirurgical pédiatrique"
+  ]
+ },
+ "Cardiopathie congénitale": {
+  "description": "Malformation du cœur présente dès la naissance (gènes NKX2-5, GATA4). Elle se manifeste surtout par des signes respiratoires et une mauvaise prise de poids.",
+  "famille": "malformation",
+  "effectif": 92,
+  "signature": {
+   "Hypotonie musculaire": 23.0,
+   "Retard de croissance": 71.0,
+   "Convulsions": 8.0,
+   "Détresse respiratoire": 85.0,
+   "Régression neurologique": 11.0
+  },
+  "examens": [
+   "Échocardiographie (examen de référence)",
+   "Électrocardiogramme (ECG)",
+   "Panel génétique (NKX2-5, GATA4) si suspicion syndromique"
+  ]
+ },
+ "Diabète": {
+  "description": "Diabète d'origine génétique (gènes GCK, KCNJ11, ABCC8) : le corps ne régule plus correctement le sucre dans le sang. Les signes neurologiques y sont rares.",
+  "famille": "métabolique",
+  "effectif": 1743,
+  "signature": {
+   "Hypotonie musculaire": 24.0,
+   "Retard de croissance": 73.0,
+   "Convulsions": 20.0,
+   "Détresse respiratoire": 23.0,
+   "Régression neurologique": 13.0
+  },
+  "examens": [
+   "Glycémie à jeun et HbA1c",
+   "Dosage du peptide C",
+   "Auto-anticorps (pour écarter un diabète de type 1)",
+   "Panel de gènes du diabète monogénique (GCK, HNF1A, KCNJ11, ABCC8)"
+  ]
+ },
+ "Maladie de Tay-Sachs": {
+  "description": "Maladie de surcharge : une enzyme manquante laisse s'accumuler une substance toxique dans les neurones, entraînant une dégénérescence neurologique rapide dès les premiers mois.",
+  "famille": "neurodégénérative",
+  "effectif": 2690,
+  "signature": {
+   "Hypotonie musculaire": 76.0,
+   "Retard de croissance": 59.0,
+   "Convulsions": 69.0,
+   "Détresse respiratoire": 33.0,
+   "Régression neurologique": 89.0
+  },
+  "examens": [
+   "Dosage de l'activité enzymatique de l'hexosaminidase A (examen de référence)",
+   "Examen du fond d'œil (recherche d'une tache rouge cerise)",
+   "Séquençage du gène HEXA"
+  ]
+ },
+ "Mucoviscidose": {
+  "description": "Maladie du gène CFTR : les sécrétions deviennent épaisses et encombrent les poumons et le pancréas. Elle associe troubles respiratoires et difficultés de croissance.",
+  "famille": "respiratoire",
+  "effectif": 3277,
+  "signature": {
+   "Hypotonie musculaire": 22.0,
+   "Retard de croissance": 80.0,
+   "Convulsions": 12.0,
+   "Détresse respiratoire": 84.0,
+   "Régression neurologique": 12.0
+  },
+  "examens": [
+   "Test de la sueur (examen de référence)",
+   "Analyse du gène CFTR",
+   "Dosage de la trypsine immunoréactive (dépistage néonatal)"
+  ]
+ },
+ "Myopathie mitochondriale": {
+  "description": "Atteinte des muscles liée à un dysfonctionnement des mitochondries (les « centrales énergétiques » des cellules). Elle se traduit surtout par une faiblesse musculaire et une fatigue à l'effort.",
+  "famille": "mitochondriale",
+  "effectif": 4202,
+  "signature": {
+   "Hypotonie musculaire": 82.0,
+   "Retard de croissance": 53.0,
+   "Convulsions": 26.0,
+   "Détresse respiratoire": 36.0,
+   "Régression neurologique": 33.0
+  },
+  "examens": [
+   "Dosage des CPK et du lactate",
+   "Biopsie musculaire (recherche de fibres rouges déchiquetées)",
+   "Séquençage de l'ADN mitochondrial"
+  ]
+ },
+ "Syndrome MELAS": {
+  "description": "Maladie mitochondriale associant une atteinte du cerveau, une acidose lactique et des épisodes ressemblant à des AVC. Transmission par la mère.",
+  "famille": "mitochondriale",
+  "effectif": 607,
+  "signature": {
+   "Hypotonie musculaire": 59.0,
+   "Retard de croissance": 65.0,
+   "Convulsions": 75.0,
+   "Détresse respiratoire": 28.0,
+   "Régression neurologique": 66.0
+  },
+  "examens": [
+   "Dosage du lactate",
+   "IRM cérébrale (lésions de type AVC)",
+   "Recherche de la mutation m.3243A>G (gène MT-TL1)"
+  ]
+ },
+ "Syndrome de Leigh": {
+  "description": "Maladie mitochondriale qui atteint le système nerveux central, débutant le plus souvent avant 2 ans. Elle provoque une perte progressive des acquis (marche, langage).",
+  "famille": "mitochondriale",
+  "effectif": 4893,
+  "signature": {
+   "Hypotonie musculaire": 79.0,
+   "Retard de croissance": 67.0,
+   "Convulsions": 72.0,
+   "Détresse respiratoire": 47.0,
+   "Régression neurologique": 84.0
+  },
+  "examens": [
+   "IRM cérébrale (lésions caractéristiques des noyaux gris centraux)",
+   "Dosage du lactate dans le sang et le liquide céphalo-rachidien",
+   "Séquençage de l'ADN mitochondrial et panel de gènes nucléaires (SURF1, NDUFS4)"
+  ]
+ }
+}

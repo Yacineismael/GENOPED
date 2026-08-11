@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GP AI — Aide à l'orientation diagnostique</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a class="lien-evitement" href="#formulaire">Aller au formulaire</a>
+
+  <header class="entete">
+    <div class="conteneur entete-flex">
+      <a class="marque" href="{{ url_for('accueil') }}" aria-label="GénoPed — retour à l'accueil">
+        <span class="logo" aria-hidden="true">GP</span>
+        <div>
+          <h1>GP AI</h1>
+          <p class="sous-titre">Aide à l'orientation diagnostique · GénoPed</p>
+        </div>
+      </a>
+      <div class="barre-praticien">
+        {% if praticien %}
+        <span class="praticien-nom">Dr. {{ praticien.prenom }} {{ praticien.nom }}
+          <span class="praticien-etab">· {{ praticien.etablissement }}</span></span>
+        <a class="bouton clair petit" href="{{ url_for('deconnexion') }}">Déconnexion</a>
+        {% else %}
+        <a class="bouton clair petit" href="{{ url_for('accueil') }}">Accueil</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <main class="conteneur">
+
+    <p class="avertissement" role="note">
+      <strong>Avertissement :</strong> cet outil est une aide à l'orientation. Il propose des pistes à
+      confirmer par un professionnel de santé et un test génétique. Il ne pose pas de diagnostic.
+    </p>
+
+    {% if resultats %}
+    <section class="resultats" id="resultats" aria-live="polite" tabindex="-1">
+      <h2>Diagnostics les plus probables</h2>
+      <p class="explication-resultats">
+        Le modèle répartit 100 % de probabilité entre les 9 maladies possibles.
+        Voici les 3 plus probables :
+      </p>
+      <ol class="liste-resultats">
+        {% for r in resultats %}
+        <li class="carte-resultat {% if loop.first %}principale{% endif %}">
+          <div class="ligne-resultat">
+            <span class="rang">{{ loop.index }}</span>
+            <span class="nom-maladie">{{ r.maladie }}</span>
+            <span class="pourcentage">{{ r.probabilite }} %</span>
+          </div>
+          <div class="jauge" role="img" aria-label="Probabilité {{ r.probabilite }} pour cent">
+            <div class="jauge-remplie" style="width: {{ r.probabilite }}%"></div>
+          </div>
+
+          <div class="detail-maladie">
+            <p class="description">{{ r.explication.description }}</p>
+
+            {% if r.explication.en_faveur %}
+            <p class="signes pour">
+              <strong>Ce qui plaide pour :</strong>
+              {% for s in r.explication.en_faveur %}{{ s.nom | lower }}
+                <span class="freq">(présent chez {{ s.pct }} % des patients atteints)</span>{% if not loop.last %} · {% endif %}{% endfor %}
+            </p>
+            {% endif %}
+
+            {% if r.explication.en_defaveur %}
+            <p class="signes contre">
+              <strong>Ce qui plaide contre :</strong>
+              absence de
+              {% for s in r.explication.en_defaveur %}{{ s.nom | lower }}
+                <span class="freq">(habituellement présent chez {{ s.pct }} %)</span>{% if not loop.last %} · {% endif %}{% endfor %}
+            </p>
+            {% endif %}
+
+            {% if r.explication.rare %}
+            <p class="signes rare">
+              Maladie rare ({{ r.explication.effectif }} cas dans les données) : piste à confirmer avec prudence.
+            </p>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+        <li class="carte-resultat autres">
+          <div class="ligne-resultat">
+            <span class="rang neutre">+</span>
+            <span class="nom-maladie">Les {{ nb_autres }} autres maladies (cumulées)</span>
+            <span class="pourcentage">{{ autres }} %</span>
+          </div>
+          <div class="jauge">
+            <div class="jauge-remplie grise" style="width: {{ autres }}%"></div>
+          </div>
+        </li>
+      </ol>
+      <p class="note-total">Total : 100 %</p>
+
+      {% if comparaison %}
+      <div class="encadre-comparaison">
+        <h3>Pourquoi ces trois maladies ensemble ?</h3>
+        <p>{{ comparaison }}</p>
+      </div>
+      {% endif %}
+
+      <div class="actions actions-resultats">
+        <a class="bouton" href="{{ url_for('analyse') }}">Nouvelle analyse</a>
+        <a class="bouton secondaire" href="{{ url_for('telecharger_pdf') }}">Télécharger le compte-rendu (PDF)</a>
+      </div>
+    </section>
+
+    <section class="recommandations" aria-labelledby="titre-reco">
+      <h2 id="titre-reco">Prochaine étape : examens de confirmation</h2>
+      <p class="explication-resultats">
+        L'outil ne pose pas de diagnostic : il aide à <strong>cibler les examens à prescrire en
+        priorité</strong>. Voici les examens habituellement réalisés pour confirmer ou écarter
+        chacune des trois pistes.
+      </p>
+
+      {% for r in resultats %}
+      <article class="bloc-reco">
+        <h3>
+          <span class="rang {% if loop.first %}principal{% endif %}">{{ loop.index }}</span>
+          {{ r.maladie }}
+          <span class="proba-reco">{{ r.probabilite }} %</span>
+        </h3>
+        <ul class="liste-examens">
+          {% for e in r.explication.examens %}
+          <li>{{ e }}</li>
+          {% endfor %}
+        </ul>
+      </article>
+      {% endfor %}
+
+      <p class="reco-generale">
+        Dans tous les cas, une <strong>consultation de génétique médicale</strong> est recommandée,
+        ainsi qu'un <strong>conseil génétique</strong> pour la famille une fois le diagnostic posé.
+      </p>
+
+      <p class="avertissement-reco" role="note">
+        <strong>Important :</strong> ces examens sont donnés à titre indicatif, d'après les
+        protocoles usuels. La décision revient au médecin, en s'appuyant sur les recommandations
+        officielles (HAS, filières de santé maladies rares).
+      </p>
+    </section>
+    {% endif %}
+
+    {% if not resultats %}
+    <form id="formulaire" method="post" autocomplete="off">
+
+      <div class="barre-outils">
+        <p class="intro-formulaire">
+          Renseignez ce que vous connaissez. Les champs non renseignés restent sur « Inconnu ».
+        </p>
+        <a class="bouton secondaire petit" href="{{ url_for('analyse', exemple=1) }}">Charger un exemple</a>
+      </div>
+
+      <!-- Indicateur d'étapes (masqué si JavaScript est désactivé) -->
+      <nav class="etapes-nav" aria-label="Progression du formulaire" hidden>
+        <ol class="etapes-liste">
+          {% for g in groupes %}
+          <li class="etape-puce" data-cible="{{ loop.index0 }}">
+            <span class="puce-num">{{ loop.index }}</span>
+            <span class="puce-nom">{{ g.court }}</span>
+          </li>
+          {% endfor %}
+        </ol>
+        <div class="progression"><div class="progression-barre"></div></div>
+      </nav>
+
+      {% for g in groupes %}
+      <fieldset class="etape {% if g.accent %}accent{% endif %}" data-index="{{ loop.index0 }}">
+        <legend>{{ g.titre }}{% if g.accent %} <span class="etiquette">prioritaire</span>{% endif %}</legend>
+        {% if g.aide %}<p class="aide-groupe">{{ g.aide }}</p>{% endif %}
+
+        {% set cases = g.champs | selectattr('type', 'equalto', 'checkbox') | list %}
+        {% set autres_champs = g.champs | rejectattr('type', 'equalto', 'checkbox') | list %}
+
+        {% if cases %}
+        <div class="grille-symptomes">
+          {% for c in cases %}
+          <div class="champ-case">
+            <input type="checkbox" id="{{ c.nom }}" name="{{ c.nom }}"
+                   {% if valeurs.get(c.nom) == 'on' %}checked{% endif %}>
+            <label for="{{ c.nom }}">{{ c.nom }}</label>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if autres_champs %}
+        <div class="grille">
+          {% for c in autres_champs %}
+          {% set idc = c.nom | replace(' ', '-') | replace('(', '') | replace(')', '') | replace("'", '') %}
+          <div class="champ">
+            <label for="{{ c.nom }}">{{ c.nom }}</label>
+            {% if c.type == 'number' %}
+              <input type="number" step="any" id="{{ c.nom }}" name="{{ c.nom }}"
+                     min="{{ c.min }}" max="{{ c.max }}" required
+                     value="{{ valeurs.get(c.nom, '') }}"
+                     placeholder="ex. {{ c.defaut }}"
+                     aria-describedby="aide-{{ idc }}">
+              <span class="aide" id="aide-{{ idc }}">obligatoire — entre {{ c.min }} et {{ c.max }}</span>
+            {% else %}
+              <select id="{{ c.nom }}" name="{{ c.nom }}">
+                {% for opt in c.options %}
+                <option value="{{ opt }}"
+                  {% if valeurs.get(c.nom) == opt or (not valeurs and opt == c.defaut) %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </fieldset>
+      {% endfor %}
+
+      <p class="message-erreur" id="message-erreur" role="alert" hidden></p>
+
+      <div class="actions">
+        <button type="button" class="bouton secondaire" id="btn-precedent" hidden>Précédent</button>
+        <button type="button" class="bouton" id="btn-suivant" hidden>Suivant</button>
+        <button type="submit" class="bouton" id="btn-analyser">Analyser</button>
+        <a class="bouton secondaire" href="{{ url_for('analyse') }}">Réinitialiser</a>
+      </div>
+    </form>
+    {% endif %}
+
+    <footer class="pied">
+      <p>Modèle : {{ meta.algorithme }} — entraîné sur {{ meta.entraine_sur }}.
+         Performance (jeu de test) : accuracy {{ (meta.perf_test.accuracy * 100) | round | int }} %,
+         Top-3 {{ (meta.perf_test.top3 * 100) | round | int }} %.</p>
+    </footer>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  {% if resultats %}
+  <script>
+    document.getElementById('resultats').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  </script>
+  {% endif %}
+</body>
+</html>

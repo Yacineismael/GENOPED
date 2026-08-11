@@ -1,0 +1,158 @@
+
+<style>
+  input[type=text] { width: 100%; padding: 8px 12px; font-size: 13px; margin-bottom: 12px; box-sizing: border-box; }
+  select { font-size: 13px; padding: 6px 10px; margin-bottom: 12px; margin-left: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  thead th { background: var(--color-background-secondary); font-weight: 500; padding: 8px 10px; text-align: left; border-bottom: 0.5px solid var(--color-border-secondary); font-size: 12px; color: var(--color-text-secondary); position: sticky; top: 0; z-index: 1; }
+  tbody tr:hover { background: var(--color-background-secondary); }
+  td { padding: 8px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); vertical-align: top; color: var(--color-text-primary); word-break: break-word; }
+  td:first-child { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-secondary); }
+  .badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+  .b-id { background: #F1EFE8; color: #444441; }
+  .b-admin { background: #F1EFE8; color: #444441; }
+  .b-gene { background: #EEEDFE; color: #3C3489; }
+  .b-bio { background: #E1F5EE; color: #085041; }
+  .b-contexte { background: #FAEEDA; color: #633806; }
+  .b-symptome { background: #FAECE7; color: #712B13; }
+  .b-cible { background: #FCEBEB; color: #791F1F; }
+  .b-quant { background: #E6F1FB; color: #0C447C; }
+  .b-quali { background: #EAF3DE; color: #27500A; }
+  .stat-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .chip { font-size: 11px; padding: 3px 9px; border-radius: 10px; background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); cursor: pointer; }
+  .chip.active { background: #EEEDFE; color: #3C3489; border-color: #AFA9EC; }
+  #count { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 8px; }
+</style>
+
+<h2 class="sr-only">Dictionnaire des 45 variables du dataset Genetic Disorders</h2>
+
+<input type="text" id="search" placeholder="Rechercher une variable, une traduction ou une définition...">
+
+<div class="stat-row">
+  <span class="chip active" data-cat="all">Toutes (45)</span>
+  <span class="chip" data-cat="id">Identification (3)</span>
+  <span class="chip" data-cat="admin">Administratif (5)</span>
+  <span class="chip" data-cat="gene">Génétique (4)</span>
+  <span class="chip" data-cat="bio">Biologique (6)</span>
+  <span class="chip" data-cat="contexte">Contexte grossesse (9)</span>
+  <span class="chip" data-cat="symptome">Symptômes / tests (10)</span>
+  <span class="chip" data-cat="cible">Cibles ML (2)</span>
+</div>
+
+<div id="count"></div>
+
+<div style="overflow-x: auto;">
+<table id="dict-table">
+  <thead>
+    <tr>
+      <th style="width:22%;">Nom original</th>
+      <th style="width:22%;">Traduction française</th>
+      <th style="width:8%;">Catégorie</th>
+      <th style="width:8%;">Type</th>
+      <th style="width:40%;">Définition</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+</div>
+
+<script>
+const vars = [
+  ["Patient Id","Identifiant patient","id","Texte","Identifiant unique attribué à chaque patient dans le système. Sert à relier les enregistrements entre eux. Non exploitable comme feature prédictive."],
+  ["Patient First Name","Prénom du patient","id","Texte","Prénom du patient. Variable nominale sans valeur prédictive, à exclure du modèle. Sensible RGPD."],
+  ["Family Name","Nom de famille","id","Texte","Nom de famille du patient. Variable nominale, à exclure du modèle. Sensible RGPD."],
+  ["Father's name","Nom du père","admin","Texte","Nom du père du patient. Variable nominale sans valeur prédictive. Sensible RGPD."],
+  ["Institute Name","Nom de l'établissement","admin","Texte","Nom de l'hôpital ou centre médical ayant pris en charge le patient. 27 valeurs uniques."],
+  ["Location of Institute","Localisation de l'établissement","admin","Texte","Adresse et coordonnées GPS de l'établissement médical. Utile pour l'analyse géographique mais à pseudonymiser."],
+  ["Mother's age","Âge de la mère","admin","Numérique","Âge de la mère au moment de la naissance ou du diagnostic. Variable quantitative continue. Peut être un facteur de risque génétique (ex : trisomie)."],
+  ["Father's age","Âge du père","admin","Numérique","Âge du père. Variable quantitative continue. Certains troubles génétiques sont liés à des mutations de novo plus fréquentes avec l'âge paternel avancé."],
+  ["Status","Statut vital du patient","admin","Catégoriel","Indique si le patient est vivant (Alive) ou décédé (Deceased). Variable binaire."],
+  ["Genes in mother's side","Gènes du côté maternel","gene","Catégoriel","Indique si des gènes porteurs de maladies génétiques ont été identifiés du côté maternel (Yes/No)."],
+  ["Inherited from father","Héritage paternel","gene","Catégoriel","Indique si le trouble génétique est hérité du père (Yes/No). Clé pour les troubles à transmission autosomique dominante."],
+  ["Maternal gene","Gène maternel impliqué","gene","Catégoriel","Précise si un gène spécifique de la lignée maternelle est impliqué dans le trouble (Yes/No)."],
+  ["Paternal gene","Gène paternel impliqué","gene","Catégoriel","Précise si un gène spécifique de la lignée paternelle est impliqué dans le trouble (Yes/No)."],
+  ["Blood cell count (mcL)","Numération des globules rouges (mcL)","bio","Numérique","Concentration de globules rouges par microlitre de sang. Valeur quantitative continue. Un taux anormal peut indiquer une anémie ou une anomalie hématologique."],
+  ["White Blood cell count (thousand per microliter)","Numération des leucocytes (milliers/µL)","bio","Numérique","Concentration de globules blancs. Valeur quantitative continue. Un taux élevé peut signaler une infection ou une leucémie ; un taux bas peut indiquer une immunodéficience."],
+  ["Blood test result","Résultat global du bilan sanguin","bio","Catégoriel","Résultat qualitatif du bilan sanguin : normal, inconclusive (non concluant), slightly abnormal (légèrement anormal), ou absent. 4 modalités."],
+  ["Respiratory Rate (breaths/min)","Fréquence respiratoire (respirations/min)","bio","Catégoriel","Fréquence respiratoire du patient : normale (30–60/min) ou tachypnée (accélérée). Variable binaire catégorielle."],
+  ["Heart Rate (rates/min)","Fréquence cardiaque (battements/min)","bio","Catégoriel","Fréquence cardiaque du patient : normale ou tachycardie (fréquence anormalement élevée). Variable binaire catégorielle."],
+  ["Birth defects","Malformations congénitales","bio","Catégoriel","Présence de malformations à la naissance : Singular (isolée) ou Multiple (plusieurs malformations). Indicateur clinique important."],
+  ["Gender","Sexe du patient","contexte","Catégoriel","Sexe biologique déclaré du patient : Male (masculin), Female (féminin), ou ambiguous (ambigu). 3 modalités."],
+  ["Patient Age","Âge du patient (en mois)","contexte","Numérique","Âge du patient exprimé en mois. Variable quantitative discrète. Permet de situer le stade développemental au moment du diagnostic."],
+  ["Place of birth","Lieu de naissance","contexte","Catégoriel","Lieu où l'accouchement a eu lieu : Institute (établissement médical) ou domicile. Variable binaire."],
+  ["Birth asphyxia","Asphyxie à la naissance","contexte","Catégoriel","Indique si le nouveau-né a souffert d'un manque d'oxygène à la naissance. Modalités : Yes, No, No record, Not applicable."],
+  ["Autopsy shows birth defect (if applicable)","Malformation détectée à l'autopsie","contexte","Catégoriel","Résultat d'autopsie révélant une malformation congénitale si applicable. Modalités : Yes, No, Not applicable."],
+  ["Folic acid details (peri-conceptional)","Prise d'acide folique (péri-conceptionnel)","contexte","Catégoriel","Indique si la mère a pris de l'acide folique autour de la conception. La carence en acide folique est associée à des malformations du tube neural (Yes/No)."],
+  ["H/O serious maternal illness","Antécédent de maladie grave chez la mère","contexte","Catégoriel","Indique si la mère a eu une maladie grave pendant ou avant la grossesse (Yes/No). Peut impacter le développement fœtal."],
+  ["H/O radiation exposure (x-ray)","Exposition aux rayonnements (radiographies)","contexte","Catégoriel","Antécédent d'exposition à des rayonnements ionisants (ex: radiographies). Modalités : Yes, No, Not applicable, Unknown."],
+  ["H/O substance abuse","Antécédent de consommation de substances","contexte","Catégoriel","Indique un antécédent de consommation de drogues, alcool ou tabac par l'un des parents. Modalités : Yes, No, Not applicable, Unknown."],
+  ["Assisted conception IVF/ART","Conception assistée (FIV/AMP)","contexte","Catégoriel","Indique si la grossesse a été obtenue par procréation médicalement assistée (FIV ou autre AMP). Variable binaire (Yes/No)."],
+  ["History of anomalies in previous pregnancies","Antécédent d'anomalies dans des grossesses précédentes","contexte","Catégoriel","Indique si des anomalies ont été détectées lors de grossesses antérieures de la même mère (Yes/No)."],
+  ["No. of previous abortion","Nombre d'avortements antérieurs","contexte","Numérique","Nombre d'interruptions de grossesse (spontanées ou volontaires) précédant la naissance du patient. Variable quantitative discrète (0 à 4+)."],
+  ["Parental consent","Consentement parental","contexte","Catégoriel","Indique si les parents ont donné leur consentement à l'utilisation des données à des fins médicales ou de recherche (toujours Yes dans ce dataset)."],
+  ["Follow-up","Niveau de suivi médical","contexte","Catégoriel","Intensité du suivi médical recommandé pour le patient : High (élevé) ou Low (faible). Reflet indirect de la gravité du trouble."],
+  ["Test 1","Résultat test 1","symptome","Numérique binaire","Résultat d'un test clinique non nommé. Valeur binaire : 0 (négatif) ou 1 (positif). La nature exacte du test n'est pas précisée dans le dataset."],
+  ["Test 2","Résultat test 2","symptome","Numérique binaire","Résultat d'un second test clinique (0/1). Même nature que Test 1."],
+  ["Test 3","Résultat test 3","symptome","Numérique binaire","Résultat d'un troisième test clinique (0/1)."],
+  ["Test 4","Résultat test 4","symptome","Numérique binaire","Résultat d'un quatrième test clinique (0/1)."],
+  ["Test 5","Résultat test 5","symptome","Numérique binaire","Résultat d'un cinquième test clinique (0/1)."],
+  ["Symptom 1","Symptôme 1 présent","symptome","Numérique binaire","Indique la présence (1) ou l'absence (0) d'un symptôme clinique non nommé. Utilisé comme indicateur binaire dans la modélisation."],
+  ["Symptom 2","Symptôme 2 présent","symptome","Numérique binaire","Présence (1) ou absence (0) d'un second symptôme clinique."],
+  ["Symptom 3","Symptôme 3 présent","symptome","Numérique binaire","Présence (1) ou absence (0) d'un troisième symptôme clinique."],
+  ["Symptom 4","Symptôme 4 présent","symptome","Numérique binaire","Présence (1) ou absence (0) d'un quatrième symptôme clinique."],
+  ["Symptom 5","Symptôme 5 présent","symptome","Numérique binaire","Présence (1) ou absence (0) d'un cinquième symptôme clinique."],
+  ["Genetic Disorder","Type de trouble génétique","cible","Catégoriel","Variable cible Niveau 1. 3 classes : Mitochondrial genetic inheritance disorders (héritage mitochondrial), Single-gene inheritance diseases (maladie monogénique), Multifactorial genetic inheritance disorders (héritage multifactoriel)."],
+  ["Disorder Subclass","Sous-classe diagnostique","cible","Catégoriel","Variable cible Niveau 2. 9 classes : Leigh syndrome, Mitochondrial myopathy, Cystic fibrosis, Tay-Sachs, Diabetes, Hemochromatosis, Leber's hereditary optic neuropathy, Alzheimer's, Cancer."],
+];
+
+const catLabels = {
+  id: ["Identification","b-id"],
+  admin: ["Administratif","b-admin"],
+  gene: ["Génétique","b-gene"],
+  bio: ["Biologique","b-bio"],
+  contexte: ["Contexte","b-contexte"],
+  symptome: ["Symptôme/test","b-symptome"],
+  cible: ["Cible ML","b-cible"],
+};
+
+let currentCat = "all";
+let currentSearch = "";
+
+function render() {
+  const tbody = document.getElementById("tbody");
+  const filtered = vars.filter(v => {
+    const matchCat = currentCat === "all" || v[2] === currentCat;
+    const q = currentSearch.toLowerCase();
+    const matchSearch = !q || v[0].toLowerCase().includes(q) || v[1].toLowerCase().includes(q) || v[4].toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+  document.getElementById("count").textContent = filtered.length + " variable" + (filtered.length > 1 ? "s" : "") + " affichée" + (filtered.length > 1 ? "s" : "");
+  tbody.innerHTML = filtered.map(v => {
+    const [col, trad, cat, type, def] = v;
+    const [catLabel, catClass] = catLabels[cat];
+    const typeClass = type.startsWith("Num") ? "b-quant" : type === "Catégoriel" ? "b-quali" : "b-quant";
+    return `<tr>
+      <td>${col}</td>
+      <td style="font-weight:500;">${trad}</td>
+      <td><span class="badge ${catClass}">${catLabel}</span></td>
+      <td><span class="badge ${typeClass}">${type}</span></td>
+      <td style="color:var(--color-text-secondary);">${def}</td>
+    </tr>`;
+  }).join("");
+}
+
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    currentCat = chip.dataset.cat;
+    render();
+  });
+});
+
+document.getElementById("search").addEventListener("input", e => {
+  currentSearch = e.target.value;
+  render();
+});
+
+render();
+</script>

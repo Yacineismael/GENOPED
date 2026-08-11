@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GénoPed — GP AI, aide à l'orientation diagnostique</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="entete">
+    <div class="conteneur entete-flex">
+      <a class="marque" href="{{ url_for('accueil') }}" aria-label="GénoPed — retour à l'accueil">
+        <span class="logo" aria-hidden="true">GP</span>
+        <div>
+          <h1>GénoPed</h1>
+          <p class="sous-titre">Diagnostic génétique pédiatrique</p>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <main id="contenu">
+
+    <section class="heros">
+      <div class="conteneur">
+        <p class="surtitre">GP AI · Système d'aide à la décision</p>
+        <h2>Bienvenue sur GP AI</h2>
+        <p class="accroche">
+          L'outil d'orientation diagnostique de GénoPed. À partir des signes cliniques d'un enfant,
+          il propose en quelques secondes les <strong>trois troubles génétiques les plus probables</strong>
+          et les examens à prescrire en priorité.
+        </p>
+      </div>
+    </section>
+
+    <div class="conteneur">
+
+      <section class="chiffres" aria-label="Chiffres clés">
+        <div class="chiffre">
+          <span class="chiffre-num">{{ (meta.perf_test.top3 * 100) | round | int }} %</span>
+          <span class="chiffre-lbl">de bonnes pistes dans le top&nbsp;3</span>
+        </div>
+        <div class="chiffre">
+          <span class="chiffre-num">{{ nb_classes }}</span>
+          <span class="chiffre-lbl">troubles génétiques couverts</span>
+        </div>
+        <div class="chiffre">
+          <span class="chiffre-num">18&nbsp;943</span>
+          <span class="chiffre-lbl">dossiers ayant servi à l'apprentissage</span>
+        </div>
+        <div class="chiffre">
+          <span class="chiffre-num">&lt; 1 s</span>
+          <span class="chiffre-lbl">pour obtenir une orientation</span>
+        </div>
+      </section>
+
+      <section class="etapes-accueil">
+        <h3>Comment ça marche</h3>
+        <ol class="liste-etapes">
+          <li>
+            <span class="num">1</span>
+            <div>
+              <strong>Renseignez le dossier</strong>
+              <p>Symptômes observés, facteurs génétiques, antécédents. Ce que vous ne savez pas
+                 reste sur « Inconnu ».</p>
+            </div>
+          </li>
+          <li>
+            <span class="num">2</span>
+            <div>
+              <strong>Obtenez trois pistes</strong>
+              <p>Le modèle affiche les trois maladies les plus probables, avec pour chacune ce qui
+                 plaide pour et ce qui plaide contre.</p>
+            </div>
+          </li>
+          <li>
+            <span class="num">3</span>
+            <div>
+              <strong>Ciblez les examens</strong>
+              <p>L'outil indique les examens de confirmation à prescrire en priorité, pour réduire
+                 le temps d'errance diagnostique.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="ethique">
+        <h3>L'IA oriente, le médecin décide</h3>
+        <p>
+          GP AI ne pose <strong>aucun diagnostic</strong>. Il hiérarchise des hypothèses pour faire
+          gagner du temps au praticien, qui conserve l'entière décision clinique. Les prédictions
+          sont accompagnées de leurs limites : maladies rares signalées, signes en défaveur affichés,
+          probabilités toujours rapportées aux {{ nb_classes }} maladies possibles.
+        </p>
+        <p class="mention-rgpd">
+          Aucune donnée patient n'est enregistrée : les informations saisies servent uniquement au
+          calcul et disparaissent à la fermeture de la page.
+        </p>
+      </section>
+
+      <div class="actions actions-centre">
+        <a class="bouton grand" href="{{ url_for('analyse') }}">Démarrer une analyse</a>
+      </div>
+
+      <footer class="pied">
+        <p>GénoPed · Lyon — outil développé par Max Swisher (cabinet Data &amp; IA).</p>
+        <p>Modèle : {{ meta.algorithme }} — accuracy {{ (meta.perf_test.accuracy * 100) | round | int }} %,
+           Top-3 {{ (meta.perf_test.top3 * 100) | round | int }} % sur le jeu de test.</p>
+      </footer>
+
+    </div>
+  </main>
+</body>
+</html>

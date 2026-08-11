@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Fichiers temporaires de travail
+_*.txt
+_*.py
+_*.json
+_*.pdf
+_*.log
+_flask.log
+
+# Base SQLite locale (recréée automatiquement au démarrage, contient des données de test)
+sql/*.db
+sql/*.db-journal
+
+# Environnements virtuels
+venv/
+.venv/
+env/
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/

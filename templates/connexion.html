@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion praticien — GénoPed</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a class="lien-evitement" href="#connexion">Aller au formulaire de connexion</a>
+
+  <header class="entete">
+    <div class="conteneur entete-flex">
+      <a class="marque" href="{{ url_for('accueil') }}" aria-label="GénoPed — retour à l'accueil">
+        <span class="logo" aria-hidden="true">GP</span>
+        <div>
+          <h1>GP AI</h1>
+          <p class="sous-titre">Aide à l'orientation diagnostique · GénoPed</p>
+        </div>
+      </a>
+      <a class="bouton clair petit" href="{{ url_for('accueil') }}">Accueil</a>
+    </div>
+  </header>
+
+  <main class="conteneur">
+    <section class="carte-connexion">
+      <h2>Identification du praticien</h2>
+      <p class="explication-resultats">
+        L'accès à l'outil est réservé aux praticiens des établissements partenaires. Votre identité
+        est enregistrée avec chaque analyse, à des fins de traçabilité médicale.
+      </p>
+
+      {% if erreur %}
+      <p class="message-erreur" role="alert">{{ erreur }}</p>
+      {% endif %}
+
+      <form id="connexion" method="post" autocomplete="off">
+        <div class="grille">
+          <div class="champ">
+            <label for="nom">Nom *</label>
+            <input type="text" id="nom" name="nom" required maxlength="80"
+                   value="{{ request.form.get('nom', '') }}">
+          </div>
+          <div class="champ">
+            <label for="prenom">Prénom *</label>
+            <input type="text" id="prenom" name="prenom" required maxlength="80"
+                   value="{{ request.form.get('prenom', '') }}">
+          </div>
+          <div class="champ pleine-largeur">
+            <label for="etablissement">Établissement</label>
+            <select id="etablissement" name="etablissement">
+              <option value="">Sélectionnez votre établissement…</option>
+              {% for e in etablissements %}
+              <option value="{{ e }}" {% if request.form.get('etablissement') == e %}selected{% endif %}>{{ e }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="champ">
+            <label for="code">Code d'accès *</label>
+            <input type="password" id="code" name="code" required
+                   aria-describedby="aide-code">
+            <span class="aide" id="aide-code">Code remis à votre établissement</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="bouton">Accéder à l'outil</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

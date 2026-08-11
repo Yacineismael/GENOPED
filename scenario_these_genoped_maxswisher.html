@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Scénario de thèse : Max Swisher × GénoPed</title>
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f6f7f9;
+    --color-border-tertiary: #d9dde3;
+    --color-text-primary: #1c2733;
+    --color-text-secondary: #5b6673;
+    --color-text-tertiary: #8a94a0;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; background: #eef1f5; margin: 0; padding: 2rem 1rem; }
+  .page { max-width: 860px; margin: 0 auto; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 4px; }
+  .badge-purple { background: #EEEDFE; color: #3C3489; }
+  .badge-teal { background: #E1F5EE; color: #085041; }
+  .badge-gray { background: #F1EFE8; color: #444441; }
+  .section-title { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--color-text-tertiary); text-transform: uppercase; margin: 1.25rem 0 0.75rem; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; flex-shrink: 0; }
+  .timeline-item { display: flex; gap: 12px; margin-bottom: 14px; }
+  .timeline-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .stat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 1rem 0; }
+  .stat-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+  .stat-num { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .stat-lbl { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .problem-box { border-left: 3px solid #E24B4A; padding: 0.75rem 1rem; background: #FCEBEB; margin: 0.75rem 0; }
+  .solution-box { border-left: 3px solid #1D9E75; padding: 0.75rem 1rem; background: #E1F5EE; margin: 0.75rem 0; }
+  .quote-box { border-left: 3px solid #7F77DD; padding: 0.75rem 1rem; background: #EEEDFE; margin: 0.75rem 0; font-style: italic; }
+  .warn-box { border-left: 3px solid #E0A500; padding: 0.75rem 1rem; background: #FFF6E5; margin: 0.75rem 0; }
+  p, li { font-size: 14px; line-height: 1.65; color: var(--color-text-primary); margin: 0 0 8px; }
+  h2 { font-size: 18px; font-weight: 500; margin: 0 0 4px; }
+  h3 { font-size: 15px; font-weight: 500; margin: 0 0 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 0.5rem 0; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--color-border-tertiary); vertical-align: top; }
+  th { color: var(--color-text-secondary); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<h2>Scénario de thèse : Max Swisher × GénoPed</h2>
+
+<div class="card" style="border-top: 3px solid #7F77DD;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+    <div class="avatar" style="background:#EEEDFE; color:#3C3489;">MS</div>
+    <div>
+      <h3 style="margin:0;">Max Swisher</h3>
+      <p style="margin:0; font-size:12px; color:var(--color-text-secondary);">Cabinet de conseil en Data &amp; Intelligence Artificielle — Paris, France</p>
+    </div>
+  </div>
+  <p style="font-size:13px; color:var(--color-text-secondary);">Fondé en 2018, Max Swisher accompagne les entreprises françaises et européennes dans la conception et le déploiement de solutions d'IA sur mesure. Le cabinet intervient de l'analyse du besoin jusqu'à la mise en production. Son équipe de consultants spécialisés en machine learning, data engineering et gestion de projet agile intervient dans les secteurs de la santé, de la finance et de l'industrie.</p>
+  <div>
+    <span class="badge badge-purple">Data Science</span>
+    <span class="badge badge-purple">Machine Learning</span>
+    <span class="badge badge-purple">Conseil IT</span>
+    <span class="badge badge-gray">Paris · Lyon · Bordeaux</span>
+  </div>
+</div>
+
+<div style="text-align:center; font-size:13px; color:var(--color-text-secondary); margin: 0.5rem 0;">
+  ↑ missionné par
+</div>
+
+<div class="card" style="border-top: 3px solid #1D9E75;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+    <div class="avatar" style="background:#E1F5EE; color:#085041;">GP</div>
+    <div>
+      <h3 style="margin:0;">GénoPed</h3>
+      <p style="margin:0; font-size:12px; color:var(--color-text-secondary);">Startup MedTech · Diagnostic génétique pédiatrique · Lyon, France · Fondée en 2019</p>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-num">47</div><div class="stat-lbl">employés</div></div>
+    <div class="stat-card"><div class="stat-num">12</div><div class="stat-lbl">hôpitaux partenaires</div></div>
+    <div class="stat-card"><div class="stat-num">4 800</div><div class="stat-lbl">dossiers / an</div></div>
+  </div>
+
+  <hr class="divider">
+  <div class="section-title">Storytelling — histoire de l'entreprise</div>
+  <p>GénoPed est née en 2019 à Lyon à l'initiative du Dr. Claire Morin, généticienne pédiatrique au CHU de Lyon, et de Thomas Bergier, ingénieur en bioinformatique. Après des années à observer des familles attendre plusieurs mois avant d'obtenir un diagnostic pour leur enfant, le Dr. Morin et Thomas Bergier ont décidé de créer une structure capable de centraliser, numériser et accélérer le parcours diagnostique en génétique pédiatrique.</p>
+  <p>Soutenue par un financement BPI France en 2021 et labellisée « Startup Santé » par le ministère de la Santé en 2022, GénoPed s'est progressivement imposée comme un acteur de référence dans le diagnostic génétique assisté, en partenariat avec 12 établissements hospitaliers en France et en Belgique.</p>
+
+  <hr class="divider">
+  <div class="section-title">Valeurs et missions</div>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:0.75rem;">
+      <p style="font-weight:500; font-size:13px; margin-bottom:4px;">Rapidité diagnostique</p>
+      <p style="font-size:12px; color:var(--color-text-secondary); margin:0;">Réduire l'errance diagnostique des familles, aujourd'hui estimée à 5 ans en moyenne en France.</p>
+    </div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:0.75rem;">
+      <p style="font-weight:500; font-size:13px; margin-bottom:4px;">Accessibilité</p>
+      <p style="font-size:12px; color:var(--color-text-secondary); margin:0;">Rendre le diagnostic génétique accessible aux établissements n'ayant pas de généticien sur place.</p>
+    </div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:0.75rem;">
+      <p style="font-weight:500; font-size:13px; margin-bottom:4px;">Éthique médicale</p>
+      <p style="font-size:12px; color:var(--color-text-secondary); margin:0;">L'IA oriente, le médecin décide. Transparence totale sur les prédictions et leurs limites.</p>
+    </div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:0.75rem;">
+      <p style="font-weight:500; font-size:13px; margin-bottom:4px;">Conformité RGPD</p>
+      <p style="font-size:12px; color:var(--color-text-secondary); margin:0;">Données de santé hébergées sur serveur HDS certifié, pseudonymisation systématique.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="section-title">Environnement technologique et de données</div>
+  <p style="font-size:13px; color:var(--color-text-secondary);">Les dossiers patients de GénoPed sont centralisés dans une base <strong>PostgreSQL</strong> hébergée sur une infrastructure certifiée HDS. C'est de cette base qu'est extrait le jeu de données pseudonymisé utilisé pour l'apprentissage du modèle : <strong>18 943 dossiers</strong> et 30 variables cliniques.</p>
+  <div>
+    <span class="badge badge-teal">Python / Pandas</span>
+    <span class="badge badge-teal">scikit-learn</span>
+    <span class="badge badge-teal">Flask</span>
+    <span class="badge badge-teal">Dossier patient numérique</span>
+    <span class="badge badge-gray">PostgreSQL</span>
+    <span class="badge badge-gray">Hébergement HDS (santé)</span>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="card">
+  <div class="section-title">Problème identifié — pourquoi GénoPed contacte Max Swisher</div>
+  <div class="problem-box">
+    <p style="font-weight:500; color:#A32D2D; margin-bottom:6px;">Le goulot d'étranglement actuel</p>
+    <p style="color:#791F1F; margin:0;">Chaque dossier patient est analysé manuellement par un généticien senior, ce qui prend en moyenne <strong>3 à 6 jours</strong>. Avec 4 800 dossiers traités par an et seulement 5 généticiens disponibles, GénoPed ne peut pas absorber sa croissance. Les délais s'allongent, et certains hôpitaux partenaires menacent de se tourner vers des concurrents.</p>
+  </div>
+  <p>En 2025, la direction de GénoPed identifie le besoin d'un outil de <strong>pré-orientation automatique</strong> : un système capable d'analyser un dossier entrant et de suggérer instantanément les troubles génétiques les plus probables, avant même l'intervention du spécialiste. Cet outil ne remplace pas le généticien — il lui prépare le terrain, lui fait gagner du temps, et lui permet de se concentrer sur les cas réellement complexes.</p>
+  <p>Après une phase d'appel d'offres, GénoPed mandate <strong>Max Swisher</strong> pour concevoir, entraîner et déployer ce système d'intelligence artificielle.</p>
+
+  <hr class="divider">
+  <div class="section-title">La mission confiée à Max Swisher</div>
+  <div class="solution-box">
+    <p style="font-weight:500; color:#085041; margin-bottom:6px;">Livrable attendu</p>
+    <p style="color:#0F6E56; margin:0;">Concevoir un modèle de classification supervisée capable de prédire, à partir des <strong>seules données cliniques disponibles avant tout test génétique</strong>, la sous-classe diagnostique d'un patient pédiatrique parmi 9 troubles génétiques — puis l'intégrer dans une <strong>application web</strong> restituant les <strong>trois hypothèses les plus probables</strong>, leur justification clinique et les examens de confirmation à prescrire en priorité.</p>
+  </div>
+
+  <div class="warn-box">
+    <p style="font-weight:500; color:#7A5B00; margin-bottom:6px;">Contrainte méthodologique majeure</p>
+    <p style="color:#7A5B00; margin:0;">Les résultats de tests génétiques (nom du gène maternel, nom du gène paternel, statut du panel) sont <strong>exclus des variables du modèle</strong>. Ils constituent une fuite d'information : obtenus <em>après</em> le diagnostic, ils rendraient le modèle artificiellement performant mais inutile en situation réelle, où l'outil doit précisément aider à décider <em>quel test prescrire</em>.</p>
+  </div>
+
+  <div class="section-title">Chronologie du projet</div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:#7F77DD;"></div>
+    <div><p style="font-weight:500; font-size:13px; margin-bottom:2px;">Janvier 2026 — Cadrage &amp; analyse du besoin</p><p style="font-size:12px; color:var(--color-text-secondary); margin:0;">Rencontres avec le Dr. Morin, audit du flux de dossiers existant, définition des indicateurs de performance.</p></div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:#7F77DD;"></div>
+    <div><p style="font-weight:500; font-size:13px; margin-bottom:2px;">Mars 2026 — Exploration &amp; modélisation</p><p style="font-size:12px; color:var(--color-text-secondary); margin:0;">Nettoyage, analyse exploratoire, détection des fuites d'information, comparaison de 5 algorithmes, optimisation des hyperparamètres.</p></div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:#1D9E75;"></div>
+    <div><p style="font-weight:500; font-size:13px; margin-bottom:2px;">Mai 2026 — Développement applicatif</p><p style="font-size:12px; color:var(--color-text-secondary); margin:0;">Développement de l'application Flask, intégration du modèle, explicabilité des prédictions, tests et déploiement.</p></div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:#1D9E75;"></div>
+    <div><p style="font-weight:500; font-size:13px; margin-bottom:2px;">Août 2026 — Livraison &amp; remise du dossier</p><p style="font-size:12px; color:var(--color-text-secondary); margin:0;">Présentation des résultats à la direction de GénoPed, remise du code source et de la documentation complète.</p></div>
+  </div>
+
+  <hr class="divider">
+  <div class="section-title">Problématique retenue</div>
+  <div class="quote-box">
+    <p style="color:#3C3489; margin:0;">« Dans quelle mesure un modèle de classification supervisée, entraîné uniquement sur les données cliniques disponibles <strong>avant tout test génétique</strong>, peut-il orienter le diagnostic des troubles génétiques de l'enfant en proposant au praticien une liste courte d'hypothèses suffisamment fiable pour cibler les examens de confirmation ? »</p>
+  </div>
+
+  <hr class="divider">
+  <div class="section-title">Indicateurs de performance retenus</div>
+  <table>
+    <tr><th>Indicateur</th><th>Pourquoi cet indicateur</th><th>Résultat</th></tr>
+    <tr><td>F1 macro</td><td>Métrique de référence : les 9 classes sont très déséquilibrées (de 25,8 % à 0,5 %), l'accuracy seule serait trompeuse.</td><td>0,42</td></tr>
+    <tr><td>Accuracy</td><td>Exigée par le référentiel ; à comparer à la baseline de 25,8 % (toujours prédire la classe majoritaire).</td><td>57 %</td></tr>
+    <tr><td>Top-3 accuracy</td><td>Indicateur métier : l'outil propose une liste courte d'hypothèses, pas une réponse unique.</td><td><strong>87 %</strong></td></tr>
+  </table>
+  <p style="font-size:13px; color:var(--color-text-secondary);">Modèle retenu : <strong>Forêt aléatoire optimisée</strong> (400 arbres, <code>min_samples_leaf=10</code>, <code>class_weight='balanced'</code>), sélectionnée après comparaison avec la régression logistique, XGBoost, l'arbre de décision et le KNN.</p>
+</div>
+
+</div>
+</body>
+</html>
